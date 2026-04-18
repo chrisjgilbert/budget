@@ -1,0 +1,16 @@
+{
+  "name": "budget",
+  "version": "1.0.0",
+  "description": "Personal budget tracker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/budget.test.js"
+  },
+  "devDependencies": {
+    "electron": "^41.2.1"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  }
+}
