@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>Budget</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Budget</h1>
+        <button id="add-month-btn" title="Add next month">+</button>
+      </div>
+      <ul id="month-list"></ul>
+    </aside>
+
+    <main class="detail">
+      <div id="empty-state">
+        <p>No months yet.</p>
+        <button id="empty-add-btn">Add first month</button>
+      </div>
+
+      <div id="month-detail" class="hidden">
+        <div class="summary-card">
+          <div class="summary-grid">
+            <span class="summary-label">Monthly total</span>
+            <span id="s-total" class="summary-val"></span>
+            <span class="summary-label">Income</span>
+            <span id="s-income" class="summary-val"></span>
+            <span class="summary-label">Difference</span>
+            <span id="s-diff" class="summary-val"></span>
+          </div>
+          <div id="reconciliation-pill" class="pill"></div>
+        </div>
+
+        <div id="form-sections"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="fields.js"></script>
+  <script src="budget.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
