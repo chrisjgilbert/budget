@@ -39,16 +39,16 @@ describe('monthlyTotal()', () => {
     assert.equal(monthlyTotal(month(field('mine', 500))), 500)
   })
 
-  it('counts wife-pays fields at 100% (accounted for reconciliation)', () => {
-    assert.equal(monthlyTotal(month(field('wife-pays', 1000))), 1000)
+  it('counts partner-pays fields at 100% (accounted for reconciliation)', () => {
+    assert.equal(monthlyTotal(month(field('partner-pays', 1000))), 1000)
   })
 
   it('counts joint-card fields at 100% (already the user\'s half)', () => {
     assert.equal(monthlyTotal(month(field('joint-card', 150))), 150)
   })
 
-  it('counts wife-expense fields at 100%', () => {
-    assert.equal(monthlyTotal(month(field('wife-expense', 350))), 350)
+  it('counts partner-expense fields at 100%', () => {
+    assert.equal(monthlyTotal(month(field('partner-expense', 350))), 350)
   })
 
   it('excludes income fields', () => {
@@ -63,7 +63,7 @@ describe('monthlyTotal()', () => {
     const m = month(
       field('shared', 800),    // 400
       field('mine', 200),      // 200
-      field('wife-pays', 100), // 100
+      field('partner-pays', 100), // 100
       field('income', 5000),   // 0
     )
     assert.equal(monthlyTotal(m), 700)
@@ -110,20 +110,20 @@ describe('diff()', () => {
 // ─── reconciliation() ─────────────────────────────────────────────────────────
 
 describe('reconciliation()', () => {
-  it('shared: wife owes you 50%', () => {
+  it('shared: partner owes you 50%', () => {
     assert.equal(reconciliation(month(field('shared', 600))), 300)
   })
 
-  it('joint-card: wife owes you the full entered amount (already your half)', () => {
+  it('joint-card: partner owes you the full entered amount (already your half)', () => {
     assert.equal(reconciliation(month(field('joint-card', 150))), 150)
   })
 
-  it('wife-pays: you owe wife 50%', () => {
-    assert.equal(reconciliation(month(field('wife-pays', 1000))), -500)
+  it('partner-pays: you owe partner 50%', () => {
+    assert.equal(reconciliation(month(field('partner-pays', 1000))), -500)
   })
 
-  it('wife-expense: reduces wife\'s debt by the full amount', () => {
-    assert.equal(reconciliation(month(field('wife-expense', 350))), -350)
+  it('partner-expense: reduces partner\'s debt by the full amount', () => {
+    assert.equal(reconciliation(month(field('partner-expense', 350))), -350)
   })
 
   it('mine: no reconciliation effect', () => {
@@ -138,31 +138,31 @@ describe('reconciliation()', () => {
     assert.equal(reconciliation(month()), 0)
   })
 
-  it('positive result means wife owes you', () => {
-    // shared(800) → wife owes 400; wife-pays(200) → you owe 100 → net +300
-    const m = month(field('shared', 800), field('wife-pays', 200))
+  it('positive result means partner owes you', () => {
+    // shared(800) → partner owes 400; partner-pays(200) → you owe 100 → net +300
+    const m = month(field('shared', 800), field('partner-pays', 200))
     assert.equal(reconciliation(m), 300)
   })
 
-  it('negative result means you owe wife', () => {
-    // wife-pays(2000) → you owe 1000; shared(400) → wife owes 200 → net -800
-    const m = month(field('wife-pays', 2000), field('shared', 400))
+  it('negative result means you owe partner', () => {
+    // partner-pays(2000) → you owe 1000; shared(400) → partner owes 200 → net -800
+    const m = month(field('partner-pays', 2000), field('shared', 400))
     assert.equal(reconciliation(m), -800)
   })
 
   it('complex scenario: multiple behaviors combined', () => {
-    // shared(800)       → wife owes 400
-    // joint-card(150)   → wife owes 150
-    // wife-pays(1000)   → you owe 500
-    // wife-expense(350) → wife owes -350
+    // shared(800)       → partner owes 400
+    // joint-card(150)   → partner owes 150
+    // partner-pays(1000)   → you owe 500
+    // partner-expense(350) → partner owes -350
     // mine(500)         → 0
     // income(5000)      → 0
     // net: 400 + 150 - 500 - 350 = -300
     const m = month(
       field('shared', 800),
       field('joint-card', 150),
-      field('wife-pays', 1000),
-      field('wife-expense', 350),
+      field('partner-pays', 1000),
+      field('partner-expense', 350),
       field('mine', 500),
       field('income', 5000),
     )
@@ -173,7 +173,7 @@ describe('reconciliation()', () => {
     const m = month(
       field('shared', 0),
       field('joint-card', 0),
-      field('wife-pays', 0),
+      field('partner-pays', 0),
     )
     assert.equal(reconciliation(m), 0)
   })

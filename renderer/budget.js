@@ -12,8 +12,8 @@ function reconciliationContribution(field) {
   switch (field.behavior) {
     case 'shared':       return v * 0.5
     case 'joint-card':   return v
-    case 'wife-pays':    return -v * 0.5
-    case 'wife-expense': return -v
+    case 'partner-pays':    return -v * 0.5
+    case 'partner-expense': return -v
     default:             return 0
   }
 }

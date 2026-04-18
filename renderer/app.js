@@ -63,9 +63,9 @@ function buildForm(m) {
           <select class="add-field-behavior">
             <option value="mine">I pay alone</option>
             <option value="shared">Split 50/50</option>
-            <option value="wife-pays">Wife pays</option>
+            <option value="partner-pays">Partner pays</option>
             <option value="joint-card">Joint card (my half)</option>
-            <option value="wife-expense">Her expense I cover</option>
+            <option value="partner-expense">Partner's expense I cover</option>
           </select>
           <label class="reset-label">
             <input type="checkbox" class="add-field-reset"> Reset monthly
@@ -208,10 +208,10 @@ function updateSummary(m) {
     pill.textContent = 'All square'
     pill.className = 'pill pill-zero'
   } else if (r > 0) {
-    pill.textContent = `Wife owes you ${fmt(r)}`
+    pill.textContent = `Partner owes you ${fmt(r)}`
     pill.className = 'pill pill-pos'
   } else {
-    pill.textContent = `You owe wife ${fmt(Math.abs(r))}`
+    pill.textContent = `You owe partner ${fmt(Math.abs(r))}`
     pill.className = 'pill pill-neg'
   }
 
