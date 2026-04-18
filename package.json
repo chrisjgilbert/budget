@@ -4,7 +4,8 @@
   "description": "Personal budget tracker",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "node --test test/budget.test.js"
   },
   "devDependencies": {
     "electron": "^41.2.1"

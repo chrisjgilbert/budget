@@ -55,3 +55,7 @@ function sectionTotal(m, sectionId) {
     .filter(f => f.section === sectionId)
     .reduce((sum, f) => sum + n(f.value), 0)
 }
+
+if (typeof module !== 'undefined') {
+  module.exports = { n, monthlyTotal, income, diff, reconciliation, sectionTotal, fmt, monthName }
+}
