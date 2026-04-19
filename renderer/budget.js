@@ -10,8 +10,7 @@ function monthContribution(field) {
 function reconciliationContribution(field) {
   const v = n(field.value)
   switch (field.behavior) {
-    case 'shared':       return v * 0.5
-    case 'joint-card':   return v
+    case 'shared':          return v * 0.5
     case 'partner-pays':    return -v * 0.5
     case 'partner-expense': return -v
     default:             return 0

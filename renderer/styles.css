@@ -330,6 +330,18 @@ body {
 }
 
 
+/* Your share display for shared fields */
+.share-amount {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  min-width: 60px;
+}
+
+.share-amount:not(:empty)::before {
+  content: 'your share ';
+}
+
 /* Add field inline form */
 .add-field-form {
   display: flex;

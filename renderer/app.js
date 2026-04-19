@@ -62,9 +62,8 @@ function buildForm(m) {
           <input type="text" class="add-field-label" placeholder="Field name">
           <select class="add-field-behavior">
             <option value="mine">I pay alone</option>
-            <option value="shared">Split 50/50</option>
+            <option value="shared">Split 50/50 (enter total)</option>
             <option value="partner-pays">Partner pays</option>
-            <option value="joint-card">Joint card (my half)</option>
             <option value="partner-expense">Partner's expense I cover</option>
           </select>
           <label class="reset-label">
@@ -109,6 +108,10 @@ function buildForm(m) {
 function fieldRowHtml(f) {
   const note = f.note ? `<span class="field-note">${f.note}</span>` : ''
   const val = (f.value && f.value !== 0) ? ` value="${f.value}"` : ''
+  const shareVal = (f.behavior === 'shared' && f.value) ? fmt(n(f.value) * 0.5) : ''
+  const shareHtml = f.behavior === 'shared'
+    ? `<span class="share-amount" id="share-${f.key}">${shareVal}</span>`
+    : ''
   return `
     <div class="field-row" data-key="${f.key}">
       <label>${f.label}${note}</label>
@@ -116,6 +119,7 @@ function fieldRowHtml(f) {
         <span class="prefix">£</span>
         <input type="number" min="0" step="0.01" data-field="${f.key}" placeholder="0"${val}>
       </div>
+      ${shareHtml}
       <button class="delete-field-btn" data-key="${f.key}" title="Remove field">&times;</button>
     </div>
   `
@@ -232,7 +236,13 @@ function handleInput(e) {
 
   const m = months.find(m => m.id === activeId)
   const field = m.fields.find(f => f.key === fieldKey)
-  if (field) field.value = parseFloat(e.target.value) || 0
+  if (!field) return
+  field.value = parseFloat(e.target.value) || 0
+
+  if (field.behavior === 'shared') {
+    const shareEl = document.getElementById(`share-${fieldKey}`)
+    if (shareEl) shareEl.textContent = field.value ? fmt(field.value * 0.5) : ''
+  }
 
   updateSummary(m)
 
