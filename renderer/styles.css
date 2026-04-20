@@ -24,7 +24,8 @@ body {
   color: var(--text);
   height: 100vh;
   overflow: hidden;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -53,9 +54,10 @@ body {
 }
 
 .sidebar-header h1 {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.3px;
   padding-left: 60px; /* clear traffic lights */
 }
 
@@ -88,12 +90,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 10px;
-  border-radius: 7px;
+  padding: 10px 12px;
+  border-radius: 8px;
   cursor: pointer;
   color: var(--sidebar-text);
-  font-size: 13px;
-  gap: 8px;
+  font-size: 14px;
+  gap: 10px;
+  transition: background 0.15s;
 }
 
 #month-list li:hover { background: var(--sidebar-hover); }
@@ -102,9 +105,9 @@ body {
 .month-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .diff-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 10px;
   flex-shrink: 0;
 }
@@ -117,10 +120,10 @@ body {
 .detail {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px 40px;
+  padding: 28px 32px 48px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 /* Empty state */
@@ -138,10 +141,12 @@ body {
   background: var(--accent);
   color: white;
   border: none;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
+  transition: opacity 0.15s;
 }
 
 #empty-add-btn:hover { opacity: 0.85; }
@@ -151,53 +156,60 @@ body {
 /* Summary card */
 .summary-card {
   background: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 16px 20px;
+  border-radius: 12px;
+  padding: 20px 24px;
   border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
   display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 4px 20px;
+.summary-row {
+  display: flex;
+  justify-content: space-between;
   align-items: baseline;
+  padding: 4px 0;
+}
+
+.summary-row:first-child {
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border);
 }
 
 .summary-label {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
-.summary-val {
+.summary-row:first-child .summary-label {
   font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.summary-val {
+  font-size: 16px;
   font-weight: 600;
   text-align: right;
+}
+
+.summary-row:first-child .summary-val {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .summary-val.pos { color: var(--green); }
 .summary-val.neg { color: var(--red); }
 
-.pill {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.pill.pill-pos { background: rgba(48, 209, 88, 0.12); color: #1a7a34; }
-.pill.pill-neg { background: rgba(255, 69, 58, 0.12); color: #c0392b; }
-.pill.pill-zero { background: var(--border); color: var(--text-secondary); }
-
 /* Form sections */
 .section {
   background: var(--card-bg);
-  border-radius: var(--radius);
+  border-radius: 12px;
   border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.04);
   overflow: hidden;
 }
 
@@ -205,11 +217,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 14px 20px;
   cursor: pointer;
   user-select: none;
   border-bottom: 1px solid transparent;
-  gap: 12px;
+  gap: 14px;
 }
 
 .section.open .section-header { border-bottom-color: var(--border); }
@@ -217,29 +229,30 @@ body {
 .section-header:hover { background: #fafafa; }
 
 .section-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   flex: 1;
+  letter-spacing: -0.2px;
 }
 
 .section-subtitle {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 400;
 }
 
 .section-subtotal {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
 .add-field-btn {
   background: none;
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   color: var(--text-secondary);
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   font-size: 16px;
   line-height: 1;
@@ -249,6 +262,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   padding: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .add-field-btn:hover {
@@ -267,7 +281,7 @@ body {
 
 .section-body {
   display: none;
-  padding: 4px 0;
+  padding: 6px 0;
 }
 
 .section.open .section-body { display: block; }
@@ -276,15 +290,15 @@ body {
 .field-row {
   display: flex;
   align-items: center;
-  padding: 7px 16px;
-  gap: 12px;
+  padding: 10px 20px;
+  gap: 14px;
   border-left: 3px solid transparent;
 }
 
 
 .field-row label {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text);
   cursor: default;
 }
@@ -299,15 +313,21 @@ body {
   display: flex;
   align-items: center;
   background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
   overflow: hidden;
-  width: 110px;
+  width: 130px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
 }
 
 .input-wrap .prefix {
-  padding: 0 6px 0 8px;
-  font-size: 13px;
+  padding: 0 6px 0 10px;
+  font-size: 14px;
   color: var(--text-secondary);
   pointer-events: none;
 }
@@ -316,9 +336,9 @@ body {
   border: none;
   background: transparent;
   outline: none;
-  font-size: 13px;
+  font-size: 14px;
   width: 100%;
-  padding: 5px 8px 5px 0;
+  padding: 8px 10px 8px 0;
   color: var(--text);
   font-family: var(--font);
   -moz-appearance: textfield;
@@ -332,10 +352,10 @@ body {
 
 /* Your share display for shared fields */
 .share-amount {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
   white-space: nowrap;
-  min-width: 60px;
+  min-width: 70px;
 }
 
 .share-amount:not(:empty)::before {
@@ -346,31 +366,35 @@ body {
 .add-field-form {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 10px;
+  padding: 12px 20px;
   background: #f8f8fa;
   border-top: 1px solid var(--border);
   flex-wrap: wrap;
 }
 
 .add-field-form input[type="text"] {
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-size: 13px;
-  width: 150px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 160px;
   outline: none;
   font-family: var(--font);
   background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.add-field-form input[type="text"]:focus { border-color: var(--accent); }
+.add-field-form input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
 
 .add-field-form select {
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-size: 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
   outline: none;
   background: #fff;
   cursor: pointer;
@@ -378,28 +402,45 @@ body {
 }
 
 .reset-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .add-field-form button {
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   font-family: var(--font);
   border: none;
+  transition: opacity 0.15s, background 0.15s;
 }
 
 .add-field-submit { background: var(--accent); color: #fff; }
 .add-field-submit:hover { opacity: 0.85; }
 .add-field-cancel { background: var(--border); color: var(--text-secondary); }
 .add-field-cancel:hover { background: #d0d0d5; }
+
+/* Edit field button */
+.edit-field-btn {
+  background: none;
+  border: none;
+  color: transparent;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.field-row:hover .edit-field-btn { color: var(--text-secondary); }
+.edit-field-btn:hover { color: var(--accent) !important; }
 
 /* Delete field button */
 .delete-field-btn {
@@ -415,6 +456,61 @@ body {
 
 .field-row:hover .delete-field-btn { color: var(--red); }
 .delete-field-btn:hover { opacity: 0.7; }
+
+/* Edit field form */
+.edit-field-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: #f8f8fa;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.edit-field-form input[type="text"] {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 160px;
+  outline: none;
+  font-family: var(--font);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.edit-field-form input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
+
+.edit-field-form select {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.edit-field-form button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font);
+  border: none;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.edit-field-save { background: var(--accent); color: #fff; }
+.edit-field-save:hover { opacity: 0.85; }
+.edit-field-cancel { background: var(--border); color: var(--text-secondary); }
+.edit-field-cancel:hover { background: #d0d0d5; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
