@@ -1,0 +1,29 @@
+<aside class="w-56 shrink-0 bg-slate-900 text-slate-200 flex flex-col">
+  <div class="flex items-center justify-between px-4 pt-5 pb-3">
+    <h1 class="text-xl font-bold text-white tracking-tight">Budget</h1>
+    <%= button_to months_path, method: :post,
+          form_class: "inline",
+          class: "w-7 h-7 rounded-md bg-slate-700 hover:bg-slate-600 text-white text-lg leading-none flex items-center justify-center cursor-pointer",
+          title: "Add next month" do %>+<% end %>
+  </div>
+
+  <ul class="flex-1 overflow-y-auto px-2 pb-4 space-y-0.5">
+    <% @months.each do |m| %>
+      <li>
+        <%= link_to month_path(m),
+              class: "flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-md text-sm hover:bg-slate-800 transition
+                      #{m == @month ? 'bg-slate-800 text-white' : 'text-slate-300'}" do %>
+          <span class="flex-1 truncate"><%= m.label %></span>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 <%= sidebar_badge_classes(m.diff) %>">
+            <%= signed_gbp(m.diff) %>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="px-4 py-3 border-t border-slate-800">
+    <%= button_to "Log out", logout_path, method: :delete,
+          class: "w-full text-left text-xs text-slate-400 hover:text-slate-200 cursor-pointer" %>
+  </div>
+</aside>

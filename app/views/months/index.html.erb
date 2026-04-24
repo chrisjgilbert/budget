@@ -1,0 +1,14 @@
+<% content_for :title, "Budget" %>
+
+<div class="flex h-screen">
+  <% @month = nil %>
+  <%= render "sidebar" %>
+
+  <main class="flex-1 flex items-center justify-center px-6">
+    <div class="text-center space-y-4">
+      <p class="text-slate-500">No months yet.</p>
+      <%= button_to "Add first month", months_path, method: :post,
+            class: "px-4 py-2 rounded-md bg-slate-900 text-white font-medium hover:bg-slate-800 transition cursor-pointer" %>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,21 @@
+<% content_for :title, "#{@month.label} · Budget" %>
+
+<div class="flex h-screen">
+  <%= render "sidebar" %>
+
+  <main class="flex-1 overflow-y-auto">
+    <div class="max-w-3xl mx-auto px-6 py-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold"><%= @month.label %></h2>
+      </div>
+
+      <%= render "summary" %>
+
+      <div class="space-y-4">
+        <% Field::SECTIONS.each do |section_id| %>
+          <%= render "section", section_id: section_id %>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

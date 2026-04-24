@@ -1,0 +1,31 @@
+<div class="bg-white border border-slate-200 rounded-xl p-5 space-y-2 text-sm" id="summary-card">
+  <div class="flex justify-between">
+    <span class="text-slate-500">Monthly total</span>
+    <span class="font-medium tabular-nums"><%= gbp(@month.monthly_total) %></span>
+  </div>
+  <div class="flex justify-between">
+    <span class="text-slate-500">Total income</span>
+    <span class="font-medium tabular-nums"><%= gbp(@month.income_total) %></span>
+  </div>
+  <div class="flex justify-between">
+    <span class="text-slate-500">Transfer to joint account</span>
+    <span class="font-medium tabular-nums"><%= gbp(@month.joint_transfer) %></span>
+  </div>
+  <div class="flex justify-between">
+    <span class="text-slate-500">Partner settlement</span>
+    <% recon = @month.reconciliation %>
+    <% if recon.zero? %>
+      <span class="font-medium">All square</span>
+    <% elsif recon.positive? %>
+      <span class="font-medium tabular-nums text-emerald-600">Partner owes <%= gbp(recon) %></span>
+    <% else %>
+      <span class="font-medium tabular-nums text-rose-600">You owe <%= gbp(recon.abs) %></span>
+    <% end %>
+  </div>
+  <div class="flex justify-between pt-2 border-t border-slate-100">
+    <span class="text-slate-500">Monthly balance</span>
+    <span class="font-semibold tabular-nums <%= summary_value_color(@month.diff) %>">
+      <%= signed_gbp(@month.diff) %>
+    </span>
+  </div>
+</div>

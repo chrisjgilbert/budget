@@ -9,6 +9,31 @@ class Month < ApplicationRecord
 
   scope :chronological, -> { order(:year, :month) }
 
+  # Mirrors addMonth() from electron/renderer/app.js: next calendar month after
+  # the latest, or the current month if none exist; copies fields forward,
+  # zeroing any marked reset_on_new.
+  def self.create_next
+    latest = chronological.last
+    year, month = if latest
+      latest.month == 12 ? [ latest.year + 1, 1 ] : [ latest.year, latest.month + 1 ]
+    else
+      now = Time.current
+      [ now.year, now.month ]
+    end
+
+    return nil if exists?(year: year, month: month)
+
+    new_month = create!(year: year, month: month)
+    latest&.fields&.each do |f|
+      new_month.fields.create!(
+        key: f.key, label: f.label, section: f.section, behavior: f.behavior,
+        reset_on_new: f.reset_on_new, position: f.position,
+        value: f.reset_on_new? ? 0 : f.value
+      )
+    end
+    new_month
+  end
+
   def label
     Date.new(year, month, 1).strftime("%B %Y")
   end

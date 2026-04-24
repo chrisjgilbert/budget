@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   post   "login",  to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
 
+  resources :months, only: %i[index show create] do
+    resources :fields, only: %i[create update destroy]
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
-  root "home#index"
+  root "months#index"
 end

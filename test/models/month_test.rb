@@ -181,6 +181,40 @@ class MonthTest < ActiveSupport::TestCase
     assert_includes dup.errors[:month], "has already been taken"
   end
 
+  # ─── create_next ───────────────────────────────────────────────────────────
+
+  test "create_next uses current calendar month when no months exist" do
+    Month.delete_all
+    now = Time.current
+    m = Month.create_next
+    assert_equal now.year,  m.year
+    assert_equal now.month, m.month
+  end
+
+  test "create_next advances by one and copies fields forward" do
+    Month.delete_all
+    prev = Month.create!(year: 2026, month: 4)
+    prev.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                        behavior: "shared", value: 1200, position: 0)
+    prev.fields.create!(key: "coffee", label: "Coffee", section: "my-account",
+                        behavior: "mine", value: 45, reset_on_new: true, position: 1)
+
+    created = Month.create_next
+    assert_equal [ 2026, 5 ], [ created.year, created.month ]
+    assert_equal 2, created.fields.count
+    assert_in_delta 1200, created.fields.find_by(key: "rent").value, 0.001
+    assert_in_delta 0,    created.fields.find_by(key: "coffee").value, 0.001
+  end
+
+  test "create_next rolls into January of the next year after December" do
+    Month.delete_all
+    Month.create!(year: 2026, month: 12)
+    m = Month.create_next
+    assert_equal [ 2027, 1 ], [ m.year, m.month ]
+  end
+
+  # ─── chronological ─────────────────────────────────────────────────────────
+
   test "chronological scope orders by year then month" do
     Month.delete_all
     [ [ 2025, 12 ], [ 2026, 1 ], [ 2025, 6 ], [ 2026, 3 ] ].each do |y, mo|

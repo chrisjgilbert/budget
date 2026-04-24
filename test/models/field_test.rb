@@ -87,6 +87,24 @@ class FieldTest < ActiveSupport::TestCase
     assert_includes dup.errors[:key], "has already been taken"
   end
 
+  # ─── generate_key ──────────────────────────────────────────────────────────
+
+  test "generate_key slugs labels into camelCase" do
+    assert_equal "rent",       Field.generate_key("Rent", @month)
+    assert_equal "rentMoney",  Field.generate_key("Rent money", @month)
+    assert_equal "groceries",  Field.generate_key("Groceries!", @month)
+    assert_equal "field",      Field.generate_key("  ", @month) # falls back to "field"
+  end
+
+  test "generate_key disambiguates collisions" do
+    @month.fields.create!(key: "rent",  label: "Rent", section: "joint-account",
+                          behavior: "mine", position: 0)
+    assert_equal "rent2", Field.generate_key("Rent", @month)
+    @month.fields.create!(key: "rent2", label: "Rent", section: "joint-account",
+                          behavior: "mine", position: 1)
+    assert_equal "rent3", Field.generate_key("Rent", @month)
+  end
+
   test "allows the same key across different months" do
     field("mine", 10).tap { |f| f.key = "rent"; f.save! }
     other = Field.new(

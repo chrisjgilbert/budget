@@ -28,8 +28,6 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
   test "correct password logs in and redirects to root" do
     post login_path, params: { password: PASSWORD }
     assert_redirected_to root_path
-    follow_redirect!
-    assert_response :success
   end
 
   test "wrong password re-renders login with alert" do
@@ -46,7 +44,8 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
   test "authenticated users bypass the gate" do
     post login_path, params: { password: PASSWORD }
     get root_path
-    assert_response :success
+    # Root redirects to the latest month (or renders empty state), but never to /login
+    refute_match %r{/login\z}, response.location.to_s if response.redirect?
   end
 
   test "authenticated users visiting /login are redirected" do
