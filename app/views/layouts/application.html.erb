@@ -23,7 +23,15 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-slate-50 text-slate-900 min-h-screen antialiased">
+    <% if notice || alert %>
+      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-md text-sm
+                  <%= notice ? 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                             : 'bg-rose-50 text-rose-900 border border-rose-200' %>">
+        <%= notice || alert %>
+      </div>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
