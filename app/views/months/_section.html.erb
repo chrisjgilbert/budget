@@ -1,0 +1,38 @@
+<%# locals: month:, section_id: %>
+<% section_fields = month.fields.select { |f| f.section == section_id } %>
+
+<section id="section-<%= section_id %>"
+         class="bg-white border border-slate-200 rounded-xl overflow-hidden"
+         data-controller="toggle">
+  <%= render "months/section_header", month: month, section_id: section_id %>
+
+  <div id="section-<%= section_id %>-fields" class="divide-y divide-slate-100">
+    <% section_fields.each do |field| %>
+      <%= render "fields/row", month: month, field: field %>
+    <% end %>
+  </div>
+
+  <div id="add-<%= section_id %>" class="hidden px-3 md:px-4 py-3 bg-slate-50 border-t border-slate-100">
+    <%= form_with url: month_fields_path(month), method: :post,
+                  data: { toggle_target: "panel" }, class: "flex flex-wrap items-center gap-2" do |f| %>
+      <%= f.hidden_field "field[section]", value: section_id %>
+      <%= f.text_field "field[label]", placeholder: "Field name", required: true,
+            class: "flex-1 basis-full md:basis-auto md:min-w-[10rem] rounded-md border border-slate-300 px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500" %>
+      <%= f.select "field[behavior]",
+            Field::BEHAVIORS.map { |b| [ Field::BEHAVIOR_LABELS[b], b ] },
+            { selected: "mine" },
+            class: "rounded-md border border-slate-300 px-2 py-2 text-sm" %>
+      <label class="text-xs text-slate-600 flex items-center gap-1">
+        <%= f.check_box "field[reset_on_new]", {}, "true", "false" %>
+        Reset monthly
+      </label>
+      <%= f.submit "Add",
+            class: "ml-auto px-3 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 cursor-pointer" %>
+      <button type="button" data-action="toggle#toggle"
+              data-toggle-target-param="add-<%= section_id %>"
+              class="px-3 py-2 rounded-md border border-slate-300 text-sm hover:bg-slate-100 cursor-pointer">
+        Cancel
+      </button>
+    <% end %>
+  </div>
+</section>

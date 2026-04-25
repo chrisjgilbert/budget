@@ -1,0 +1,28 @@
+<% content_for :title, "#{@month.label} · Budget" %>
+
+<div class="md:flex md:h-screen" data-controller="drawer">
+  <%= render "months/sidebar", months: @months, month: @month %>
+
+  <main class="flex-1 md:overflow-y-auto">
+    <%# Mobile top bar with hamburger %>
+    <div class="md:hidden sticky top-0 z-20 flex items-center justify-between gap-3 px-3 py-3 bg-white border-b border-slate-200">
+      <button type="button" data-action="drawer#open"
+              class="min-w-10 min-h-10 rounded-md text-slate-700 hover:bg-slate-100 text-2xl leading-none flex items-center justify-center cursor-pointer"
+              aria-label="Open menu">&#9776;</button>
+      <span class="font-semibold text-slate-800 truncate flex-1 text-center"><%= @month.label %></span>
+      <span class="min-w-10"></span>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5 md:space-y-6">
+      <h2 class="hidden md:block text-2xl font-semibold"><%= @month.label %></h2>
+
+      <%= render "months/summary", month: @month %>
+
+      <div class="space-y-4">
+        <% Field::SECTIONS.each do |section_id| %>
+          <%= render "months/section", month: @month, section_id: section_id %>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,6 @@
+<%# locals: field: %>
+<span id="share-<%= field.id %>" class="text-xs text-slate-500 tabular-nums tabular-nums whitespace-nowrap">
+  <% if field.behavior == "shared" && field.value.to_f != 0 %>
+    <%= gbp(field.share_amount) %>
+  <% end %>
+</span>

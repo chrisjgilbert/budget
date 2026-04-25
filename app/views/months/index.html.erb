@@ -1,0 +1,23 @@
+<% content_for :title, "Budget" %>
+
+<div class="md:flex md:h-screen" data-controller="drawer">
+  <%= render "months/sidebar", months: @months, month: nil %>
+
+  <main class="flex-1 md:overflow-y-auto">
+    <div class="md:hidden sticky top-0 z-20 flex items-center justify-between gap-3 px-3 py-3 bg-white border-b border-slate-200">
+      <button type="button" data-action="drawer#open"
+              class="min-w-10 min-h-10 rounded-md text-slate-700 hover:bg-slate-100 text-2xl leading-none flex items-center justify-center cursor-pointer"
+              aria-label="Open menu">&#9776;</button>
+      <span class="font-semibold text-slate-800 truncate flex-1 text-center">Budget</span>
+      <span class="min-w-10"></span>
+    </div>
+
+    <div class="min-h-[60vh] flex items-center justify-center px-6">
+      <div class="text-center space-y-4">
+        <p class="text-slate-500">No months yet.</p>
+        <%= button_to "Add first month", months_path, method: :post,
+              class: "px-4 py-2 rounded-md bg-slate-900 text-white font-medium hover:bg-slate-800 transition cursor-pointer" %>
+      </div>
+    </div>
+  </main>
+</div>

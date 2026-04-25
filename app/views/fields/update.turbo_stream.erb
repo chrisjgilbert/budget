@@ -1,0 +1,21 @@
+<% if @value_only %>
+  <%# Autosave path: narrow updates only, leave the <input> (and focus) alone. %>
+  <%= turbo_stream.replace "share-#{@field.id}",
+        partial: "fields/share", locals: { field: @field } %>
+  <%= turbo_stream.replace "section-#{@field.section}-header",
+        partial: "months/section_header", locals: { month: @month, section_id: @field.section } %>
+<% else %>
+  <%# Edit-form path: section changed or label/behavior/reset changed —
+      re-render whichever sections are affected. %>
+  <%= turbo_stream.replace "section-#{@field.section}",
+        partial: "months/section", locals: { month: @month, section_id: @field.section } %>
+  <% if @old_section && @old_section != @field.section %>
+    <%= turbo_stream.replace "section-#{@old_section}",
+          partial: "months/section", locals: { month: @month, section_id: @old_section } %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace "summary-card",
+      partial: "months/summary", locals: { month: @month } %>
+<%= turbo_stream.replace "sidebar-month-#{@month.id}",
+      partial: "months/sidebar_item", locals: { m: @month, active: true } %>
