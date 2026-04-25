@@ -1,7 +1,7 @@
 <%# locals: month:, section_id: %>
 <% subtotal = month.section_total(section_id) %>
 <header id="section-<%= section_id %>-header"
-        class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-100">
+        class="flex items-center justify-between gap-2 px-3 md:px-4 py-2 md:py-3 border-b border-slate-100">
   <h2 class="font-semibold text-slate-800"><%= Field::SECTION_TITLES.fetch(section_id) %></h2>
   <span class="text-sm text-slate-500 tabular-nums flex-1 text-right">
     <%= subtotal.positive? ? gbp(subtotal) : "" %>
@@ -9,6 +9,6 @@
   <button type="button"
           data-action="toggle#toggle"
           data-toggle-target-param="add-<%= section_id %>"
-          class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center cursor-pointer"
+          class="min-w-10 min-h-10 md:w-8 md:h-8 md:min-w-0 md:min-h-0 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center cursor-pointer"
           title="Add field">+</button>
 </header>

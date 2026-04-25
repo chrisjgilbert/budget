@@ -1,7 +1,7 @@
 <%# locals: month:, field: %>
 <div id="field-<%= field.id %>" data-controller="toggle">
-  <div class="px-4 py-2.5 flex items-center gap-3">
-    <div class="flex-1 min-w-0">
+  <div class="px-3 md:px-4 py-2 md:py-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 md:gap-x-3">
+    <div class="flex-1 min-w-0 basis-full md:basis-auto">
       <div class="text-sm font-medium text-slate-800 truncate">
         <%= field.label %>
         <% if field.behavior != "mine" %>
@@ -14,13 +14,13 @@
 
     <%= form_with url: month_field_path(month, field), method: :patch,
                   data: { controller: "autosave" },
-                  class: "flex items-center gap-2" do |f| %>
+                  class: "flex items-center gap-2 ml-auto md:ml-0" do |f| %>
       <div class="relative">
         <span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 text-sm">£</span>
         <%= f.number_field "field[value]", value: field.value.to_s.sub(/\.00\z/, ""),
               step: "0.01", min: 0, inputmode: "decimal", placeholder: "0",
               data: { action: "input->autosave#save" },
-              class: "w-28 pl-6 pr-2 py-1.5 rounded-md border border-slate-300 text-sm text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-slate-500" %>
+              class: "w-24 md:w-28 pl-6 pr-2 py-2 md:py-1.5 rounded-md border border-slate-300 text-sm text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-slate-500" %>
       </div>
       <%= f.submit "Save", class: "sr-only" %>
     <% end %>
@@ -29,29 +29,30 @@
 
     <button type="button" data-action="toggle#toggle"
             data-toggle-target-param="edit-<%= field.id %>"
-            class="text-slate-400 hover:text-slate-700 text-sm cursor-pointer w-6 text-center" title="Edit">✎</button>
+            class="min-w-10 min-h-10 md:w-7 md:h-7 md:min-w-0 md:min-h-0 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 text-sm cursor-pointer flex items-center justify-center"
+            title="Edit">✎</button>
 
     <%= button_to month_field_path(month, field), method: :delete,
           form_class: "inline",
           data: { turbo_confirm: "Remove \"#{field.label}\"?" },
-          class: "text-slate-400 hover:text-rose-600 text-lg cursor-pointer w-6 leading-none" do %>&times;<% end %>
+          class: "min-w-10 min-h-10 md:w-7 md:h-7 md:min-w-0 md:min-h-0 rounded-md text-slate-400 hover:text-rose-600 hover:bg-slate-100 text-lg leading-none cursor-pointer flex items-center justify-center" do %>&times;<% end %>
   </div>
 
-  <div id="edit-<%= field.id %>" class="hidden px-4 py-3 bg-slate-50 border-t border-slate-100">
+  <div id="edit-<%= field.id %>" class="hidden px-3 md:px-4 py-3 bg-slate-50 border-t border-slate-100">
     <%= form_with url: month_field_path(month, field), method: :patch,
                   class: "flex flex-wrap items-center gap-2" do |f| %>
       <%= f.text_field "field[label]", value: field.label, required: true,
-            class: "flex-1 min-w-[10rem] rounded-md border border-slate-300 px-2.5 py-1.5 text-sm" %>
+            class: "flex-1 basis-full md:basis-auto md:min-w-[10rem] rounded-md border border-slate-300 px-2.5 py-2 text-sm" %>
       <%= f.select "field[behavior]",
             Field::BEHAVIORS.map { |b| [ Field::BEHAVIOR_LABELS[b], b ] },
             { selected: field.behavior },
-            class: "rounded-md border border-slate-300 px-2 py-1.5 text-sm" %>
+            class: "rounded-md border border-slate-300 px-2 py-2 text-sm" %>
       <label class="text-xs text-slate-600 flex items-center gap-1">
         <%= f.check_box "field[reset_on_new]", { checked: field.reset_on_new? }, "true", "false" %>
         Reset monthly
       </label>
       <%= f.submit "Save",
-            class: "px-3 py-1.5 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 cursor-pointer" %>
+            class: "ml-auto px-3 py-2 rounded-md bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 cursor-pointer" %>
     <% end %>
   </div>
 </div>

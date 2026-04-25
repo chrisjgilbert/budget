@@ -34,6 +34,32 @@ class MonthsControllerTest < ActionDispatch::IntegrationTest
     Field::SECTIONS.each { |s| assert_select "#section-#{s}" }
   end
 
+  # ─── Mobile affordances ────────────────────────────────────────────────────
+
+  test "show includes a mobile drawer shell with hamburger and backdrop" do
+    Month.delete_all
+    m = Month.create!(year: 2026, month: 3)
+    with_password do
+      get month_path(m)
+    end
+    body = response.body
+    assert_match %r{data-controller="drawer"}, body, "drawer controller wires up the layout"
+    assert_match %r{data-action="drawer#open"}, body, "hamburger triggers drawer#open"
+    assert_match %r{data-action="click->drawer#close"}, body, "backdrop closes drawer"
+    assert_match %r{data-drawer-target="panel"}, body, "sidebar registered as drawer panel"
+    assert_match %r{data-drawer-target="backdrop"}, body, "backdrop registered as drawer target"
+    # Sidebar starts off-screen on mobile, slides in on md+
+    assert_match %r{-translate-x-full[^"]*md:translate-x-0}, body
+  end
+
+  test "index empty state also includes the drawer shell" do
+    Month.delete_all
+    with_password { get months_path }
+    body = response.body
+    assert_match %r{data-controller="drawer"}, body
+    assert_match %r{data-action="drawer#open"}, body
+  end
+
   test "create builds the next month after the latest and copies fields forward" do
     Month.delete_all
     previous = Month.create!(year: 2026, month: 3)

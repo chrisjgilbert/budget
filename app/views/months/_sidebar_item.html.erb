@@ -1,7 +1,8 @@
 <%# locals: m:, active: %>
 <li id="sidebar-month-<%= m.id %>">
   <%= link_to month_path(m),
-        class: "flex items-center justify-between gap-2.5 px-3 py-2.5 rounded-md text-sm hover:bg-slate-800 transition
+        data: { action: "click->drawer#close" },
+        class: "flex items-center justify-between gap-2.5 px-3 py-3 md:py-2.5 rounded-md text-sm hover:bg-slate-800 transition
                 #{active ? 'bg-slate-800 text-white' : 'text-slate-300'}" do %>
     <span class="flex-1 truncate"><%= m.label %></span>
     <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 <%= sidebar_badge_classes(m.diff) %>">
