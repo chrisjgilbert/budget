@@ -1,8 +1,7 @@
 <% content_for :title, "Budget" %>
 
 <div class="flex h-screen">
-  <% @month = nil %>
-  <%= render "sidebar" %>
+  <%= render "months/sidebar", months: @months, month: nil %>
 
   <main class="flex-1 flex items-center justify-center px-6">
     <div class="text-center space-y-4">

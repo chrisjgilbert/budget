@@ -1,34 +1,19 @@
-<%#
-  Renders one section card for the given section_id. The surrounding
-  month is read from @month.
-%>
-<% title = Field::SECTION_TITLES.fetch(section_id) %>
-<% section_fields = @month.fields.select { |f| f.section == section_id } %>
-<% subtotal = section_fields.sum(&:value) %>
+<%# locals: month:, section_id: %>
+<% section_fields = month.fields.select { |f| f.section == section_id } %>
 
-<section class="bg-white border border-slate-200 rounded-xl overflow-hidden"
-         data-controller="toggle"
-         id="section-<%= section_id %>">
-  <header class="flex items-center justify-between gap-2 px-4 py-3 border-b border-slate-100">
-    <h2 class="font-semibold text-slate-800"><%= title %></h2>
-    <span class="text-sm text-slate-500 tabular-nums flex-1 text-right">
-      <%= subtotal.positive? ? gbp(subtotal) : "" %>
-    </span>
-    <button type="button"
-            data-action="toggle#toggle"
-            data-toggle-target-param="add-<%= section_id %>"
-            class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-lg leading-none flex items-center justify-center cursor-pointer"
-            title="Add field">+</button>
-  </header>
+<section id="section-<%= section_id %>"
+         class="bg-white border border-slate-200 rounded-xl overflow-hidden"
+         data-controller="toggle">
+  <%= render "months/section_header", month: month, section_id: section_id %>
 
-  <div class="divide-y divide-slate-100">
+  <div id="section-<%= section_id %>-fields" class="divide-y divide-slate-100">
     <% section_fields.each do |field| %>
-      <%= render "fields/row", field: field %>
+      <%= render "fields/row", month: month, field: field %>
     <% end %>
   </div>
 
   <div id="add-<%= section_id %>" class="hidden px-4 py-3 bg-slate-50 border-t border-slate-100">
-    <%= form_with url: month_fields_path(@month), method: :post, local: true,
+    <%= form_with url: month_fields_path(month), method: :post,
                   data: { toggle_target: "panel" }, class: "flex flex-wrap items-center gap-2" do |f| %>
       <%= f.hidden_field "field[section]", value: section_id %>
       <%= f.text_field "field[label]", placeholder: "Field name", required: true,

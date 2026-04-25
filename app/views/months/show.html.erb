@@ -1,7 +1,7 @@
 <% content_for :title, "#{@month.label} · Budget" %>
 
 <div class="flex h-screen">
-  <%= render "sidebar" %>
+  <%= render "months/sidebar", months: @months, month: @month %>
 
   <main class="flex-1 overflow-y-auto">
     <div class="max-w-3xl mx-auto px-6 py-8 space-y-6">
@@ -9,11 +9,11 @@
         <h2 class="text-2xl font-semibold"><%= @month.label %></h2>
       </div>
 
-      <%= render "summary" %>
+      <%= render "months/summary", month: @month %>
 
       <div class="space-y-4">
         <% Field::SECTIONS.each do |section_id| %>
-          <%= render "section", section_id: section_id %>
+          <%= render "months/section", month: @month, section_id: section_id %>
         <% end %>
       </div>
     </div>

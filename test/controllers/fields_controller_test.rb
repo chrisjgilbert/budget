@@ -81,9 +81,85 @@ class FieldsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to month_path(@month)
   end
 
+  # ─── Turbo Stream responses ────────────────────────────────────────────────
+
+  TURBO_STREAM = Mime[:turbo_stream].to_s.freeze
+
+  test "create responds with turbo stream replacing section, summary, sidebar" do
+    with_password do
+      post month_fields_path(@month),
+        params: { field: { label: "Rent", section: "joint-account", behavior: "shared" } },
+        as: :turbo_stream
+    end
+    assert_response :success
+    assert_equal TURBO_STREAM, response.media_type
+    body = response.body
+    assert_match %r{action="replace" target="section-joint-account"}, body
+    assert_match %r{action="replace" target="summary-card"}, body
+    assert_match %r{action="replace" target="sidebar-month-#{@month.id}"}, body
+  end
+
+  test "value-only update emits a narrow turbo stream that leaves the input alone" do
+    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                              behavior: "shared", value: 100, position: 0)
+    with_password do
+      patch month_field_path(@month, f),
+        params: { field: { value: "1200" } },
+        as: :turbo_stream
+    end
+    body = response.body
+    assert_match %r{action="replace" target="share-#{f.id}"}, body
+    assert_match %r{action="replace" target="section-joint-account-header"}, body
+    assert_match %r{action="replace" target="summary-card"}, body
+    assert_match %r{action="replace" target="sidebar-month-#{@month.id}"}, body
+    refute_match %r{target="section-joint-account"[^-]}, body # no full-section replace
+    refute_match %r{target="field-#{f.id}"}, body             # no row replace
+  end
+
+  test "non-value update replaces the affected section" do
+    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                              behavior: "mine", value: 100, position: 0)
+    with_password do
+      patch month_field_path(@month, f),
+        params: { field: { label: "Rent 2", behavior: "shared" } },
+        as: :turbo_stream
+    end
+    body = response.body
+    assert_match %r{action="replace" target="section-joint-account"}, body
+    assert_match %r{action="replace" target="summary-card"}, body
+  end
+
+  test "update that moves a field across sections replaces both sections" do
+    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                              behavior: "mine", value: 100, position: 0)
+    with_password do
+      patch month_field_path(@month, f),
+        params: { field: { section: "my-account" } },
+        as: :turbo_stream
+    end
+    body = response.body
+    assert_match %r{action="replace" target="section-my-account"}, body
+    assert_match %r{action="replace" target="section-joint-account"}, body
+  end
+
+  test "destroy emits a remove stream plus header/summary/sidebar updates" do
+    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                              behavior: "mine", value: 100, position: 0)
+    with_password do
+      delete month_field_path(@month, f), as: :turbo_stream
+    end
+    body = response.body
+    assert_match %r{action="remove" target="field-#{f.id}"}, body
+    assert_match %r{action="replace" target="section-joint-account-header"}, body
+    assert_match %r{action="replace" target="summary-card"}, body
+  end
+
+  # ─── Authentication ────────────────────────────────────────────────────────
+
   test "authentication is required" do
     delete logout_path
-    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account", behavior: "mine", position: 0)
+    f = @month.fields.create!(key: "rent", label: "Rent", section: "joint-account",
+                              behavior: "mine", position: 0)
     patch month_field_path(@month, f), params: { field: { value: 100 } }
     assert_redirected_to login_path
   end

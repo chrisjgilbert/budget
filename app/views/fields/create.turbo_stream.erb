@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "section-#{@field.section}",
+      partial: "months/section", locals: { month: @month, section_id: @field.section } %>
+<%= turbo_stream.replace "summary-card",
+      partial: "months/summary", locals: { month: @month } %>
+<%= turbo_stream.replace "sidebar-month-#{@month.id}",
+      partial: "months/sidebar_item", locals: { m: @month, active: true } %>
