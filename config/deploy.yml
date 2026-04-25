@@ -1,0 +1,80 @@
+# Name of your application. Used to uniquely configure containers.
+service: budget
+
+# Name of the container image (registry/owner/name).
+image: chrisjgilbert/budget
+
+# Deploy to these servers.
+servers:
+  web:
+    # TODO: replace with the public IPv4 of your Hetzner VM
+    - 203.0.113.10
+
+# Kamal-Proxy handles HTTPS via Let's Encrypt automatically.
+# `host` must resolve to the server IP above; the cert is issued on first deploy.
+proxy:
+  ssl: true
+  host: budget.gilbert.works
+  app_port: 80
+
+# Credentials for your image host. Using GitHub Container Registry — free, scoped
+# to your repo, and we already use GitHub for source.
+registry:
+  server: ghcr.io
+  username: chrisjgilbert
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Build amd64 images locally; Hetzner CCX/CX hosts are amd64.
+builder:
+  arch: amd64
+
+# ENV variables passed into containers.
+env:
+  clear:
+    # Tell Solid Queue/Cache/Cable to use SQLite databases on the persistent volume.
+    SOLID_QUEUE_IN_PUMA: true
+    # Pin number of Puma threads to keep SQLite happy on a small VM.
+    RAILS_MAX_THREADS: 3
+  secret:
+    - RAILS_MASTER_KEY
+    - BUDGET_PASSWORD_HASH
+
+# Persistent storage volume for the SQLite database files. Without this, every
+# new container loses all data.
+volumes:
+  - "budget_storage:/rails/storage"
+
+# Bridge fingerprinted assets between versions so in-flight requests don't 404
+# on the old hashed filename right after a deploy.
+asset_path: /rails/public/assets
+
+# SSH user on the Hetzner VM. Hetzner Cloud images use `root` by default; if
+# you've made a deploy user, set it here.
+ssh:
+  user: root
+
+# Convenience aliases — invoke as `bin/kamal console` etc.
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell:   app exec --interactive --reuse "bash"
+  logs:    app logs -f
+  dbc:     app exec --interactive --reuse "bin/rails dbconsole"
+
+# Litestream — uncomment after the first successful deploy to get continuous
+# SQLite replication to S3-compatible storage. Pick a target (Hetzner Object
+# Storage, Backblaze B2, etc.) and add the matching env vars to .kamal/secrets.
+#
+# accessories:
+#   litestream:
+#     image: litestream/litestream:0.3
+#     host: 203.0.113.10
+#     cmd: replicate
+#     volumes:
+#       - "budget_storage:/data"
+#     files:
+#       - config/litestream.yml:/etc/litestream.yml
+#     env:
+#       secret:
+#         - LITESTREAM_ACCESS_KEY_ID
+#         - LITESTREAM_SECRET_ACCESS_KEY

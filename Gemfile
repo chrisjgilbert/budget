@@ -56,4 +56,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
+  gem "kamal", require: false
 end
