@@ -38,7 +38,6 @@ class SessionsController < ApplicationController
   end
 
   def stored_password_hash
-    Rails.application.credentials.budget_password_hash ||
-      ENV["BUDGET_PASSWORD_HASH"]
+    Rails.application.credentials.app_password_hash!
   end
 end

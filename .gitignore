@@ -58,3 +58,6 @@ out/
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Kamal local secrets — committed file is a template only.
+/.kamal/secrets.local
+/.kamal/secrets.*.local
